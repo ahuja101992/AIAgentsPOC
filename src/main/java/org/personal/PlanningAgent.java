@@ -10,6 +10,8 @@ import dev.langchain4j.web.search.WebSearchEngine;
 import dev.langchain4j.web.search.tavily.TavilyWebSearchEngine;
 import dev.langchain4j.web.search.WebSearchTool;
 
+import java.time.Duration;
+
 public class PlanningAgent {
 
     // --- THE BRAIN (Interface) ---
@@ -46,8 +48,9 @@ public class PlanningAgent {
         // 1. Configure the Brain (Gemini Flash is fast and good for planning)
         ChatLanguageModel model = GoogleAiGeminiChatModel.builder()
                 .apiKey(System.getenv("GEMINI_API_KEY"))
-                .modelName("gemini-flash-latest")
+                .modelName("gemini-flash-lite-latest")
                 .temperature(0.0) // Keep it deterministic
+                .timeout(Duration.ofSeconds(120)) // <--- THE FIX: Give it 2 minutes
                 .build();
 
         // 2. Configure the Tool (Tavily)
